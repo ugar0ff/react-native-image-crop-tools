@@ -30,7 +30,7 @@ class ImageCropViewManager: SimpleViewManager<CropImageView>() {
     override fun createViewInstance(reactContext: ThemedReactContext): CropImageView {
         val view =  CropImageView(reactContext)
         view.setOnCropImageCompleteListener { _, result ->
-            if (result.isSuccessful) {
+            if (result.isSuccessful && result.cropRect != null) {
                 val map = Arguments.createMap()
                 map.putString("uri", result.uri.toString())
                 map.putInt("width", result.cropRect.width())
