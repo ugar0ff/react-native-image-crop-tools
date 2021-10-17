@@ -11,6 +11,10 @@ class ImageCropToolsPackage : ReactPackage {
         return mutableListOf(ImageCropToolsModule(reactContext))
     }
 
+    override fun createJSModules(): MutableList<Class<out JavaScriptModule>> {
+        return mutableListOf()
+    }
+
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
         return mutableListOf(ImageCropViewManager())
     }
