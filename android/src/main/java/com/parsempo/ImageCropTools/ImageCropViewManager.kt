@@ -29,7 +29,7 @@ class ImageCropViewManager: SimpleViewManager<CropImageView>() {
 
     override fun createViewInstance(reactContext: ThemedReactContext): CropImageView {
         val view =  CropImageView(reactContext)
-        view.setOnCropImageCompleteListener { _, result ->
+        view.setOnCropImageCompleteListener { (_: CropImageView, result: CropImageView.CropResult) ->
             if (result.isSuccessful && result.cropRect != null) {
                 val map = Arguments.createMap()
                 map.putString("uri", result.uri.toString())
@@ -69,7 +69,7 @@ class ImageCropViewManager: SimpleViewManager<CropImageView>() {
                 val preserveTransparency = args?.getBoolean(0) ?: false
                 var extension = "jpg"
                 var format = Bitmap.CompressFormat.JPEG
-                if (preserveTransparency && root.croppedImage.hasAlpha()) {
+                if (preserveTransparency && root.croppedImage?.hasAlpha() == true) {
                     extension = "png"
                     format = Bitmap.CompressFormat.PNG
                 }
