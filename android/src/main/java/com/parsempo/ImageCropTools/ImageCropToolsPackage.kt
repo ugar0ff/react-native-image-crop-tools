@@ -11,7 +11,7 @@ class ImageCropToolsPackage : ReactPackage {
         return mutableListOf(ImageCropToolsModule(reactContext))
     }
 
-    override fun createJSModules(): MutableList<Class<out JavaScriptModule>> {
+    fun createJSModules(): MutableList<Class<out JavaScriptModule>> {
         return mutableListOf()
     }
 
