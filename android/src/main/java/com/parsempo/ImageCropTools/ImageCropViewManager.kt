@@ -29,18 +29,22 @@ class ImageCropViewManager: SimpleViewManager<CropImageView>() {
 
     override fun createViewInstance(reactContext: ThemedReactContext): CropImageView {
         val view =  CropImageView(reactContext)
-        view.setOnCropImageCompleteListener { (_: CropImageView, result: CropImageView.CropResult) ->
-            if (result.isSuccessful && result.cropRect != null) {
-                val map = Arguments.createMap()
-                map.putString("uri", result.uri.toString())
-                map.putInt("width", result.cropRect.width())
-                map.putInt("height", result.cropRect.height())
-                reactContext.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
-                        view.id,
-                        ON_IMAGE_SAVED,
-                        map
-                )
-            }
+        with(view) {
+            setOnCropImageCompleteListener(object : CropImageView.OnCropImageCompleteListener {
+                override fun onCropImageComplete(view: CropImageView, result: CropImageView.CropResult) {
+                    if (result.isSuccessful && result.cropRect != null) {
+                        val map = Arguments.createMap()
+                        map.putString("uri", result.uriContent.toString())
+                        map.putInt("width", result.cropRect!!.width())
+                        map.putInt("height", result.cropRect!!.height())
+                        reactContext.getJSModule(RCTEventEmitter::class.java)?.receiveEvent(
+                            view.id,
+                            ON_IMAGE_SAVED,
+                            map
+                        )
+                    }
+                }
+            })
         }
         return view
     }
@@ -76,7 +80,7 @@ class ImageCropViewManager: SimpleViewManager<CropImageView>() {
                 val path = File(root.context.cacheDir, "${UUID.randomUUID()}.$extension").toURI().toString()
                 val quality = args?.getInt(1) ?: 100
 
-                root.saveCroppedImageAsync(Uri.parse(path), format, quality)
+                root.saveCroppedImageAsync(Uri.parse(path), format, quality, root.width, root.height)
             }
             ROTATE_IMAGE_COMMAND -> {
                 val clockwise = args?.getBoolean(0) ?: true
