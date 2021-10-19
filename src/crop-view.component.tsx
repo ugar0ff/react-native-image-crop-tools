@@ -8,7 +8,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-const RCTCropView = requireNativeComponent('CropView');
+const RCTCropView = requireNativeComponent<any>('CropView');
 
 type Response = {
   uri: string;
